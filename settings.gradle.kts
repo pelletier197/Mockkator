@@ -1,1 +1,1 @@
-rootProject.name = "fixkture"
+rootProject.name = "mockkator"

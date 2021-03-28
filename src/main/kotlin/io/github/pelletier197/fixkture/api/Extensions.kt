@@ -5,9 +5,13 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiJavaFile
+import com.intellij.psi.PsiType.getTypeByName
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.util.PsiTypesUtil
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 
 val AnActionEvent.currentProject: Project get() = currentProjectOrNull() ?: error("project should not be null")
@@ -22,15 +26,27 @@ fun AnActionEvent.caretOrNull(): Caret? = this.getData(CommonDataKeys.CARET)
 
 val AnActionEvent.currentElement: PsiElement? get() = caretOrNull()?.let { fileOrNull()?.findElementAt(it.caretModel.offset) }
 val AnActionEvent.parentElement: PsiElement? get() = this.currentElement?.parent
+val AnActionEvent.parentClassElement: PsiClass? get() {
+    var current = currentElement
 
-fun PsiFile.isJava(): Boolean {
-    return this is PsiJavaFile
+    while (current != null) {
+        if(current is KtClass) {
+            if(current.fqName == null) {
+                return null
+            }
+            return PsiTypesUtil.getPsiClass(getTypeByName(current.fqName!!.asString(), currentProject, GlobalSearchScope.allScope(currentProject)))
+        }
+
+        current = current.parent
+    }
+    return null
 }
+
 
 fun PsiFile.isKotlin(): Boolean {
     return this is KtFile
 }
 
 fun PsiFile.isSupported(): Boolean {
-    return isWritable && (isKotlin() || isJava())
+    return isWritable && (isKotlin())
 }

@@ -30,8 +30,8 @@ val AnActionEvent.parentClassElement: PsiClass? get() {
     var current = currentElement
 
     while (current != null) {
-        if(current is KtClass) {
-            if(current.fqName == null) {
+        if (current is KtClass) {
+            if (current.fqName == null) {
                 return null
             }
             return PsiTypesUtil.getPsiClass(getTypeByName(current.fqName!!.asString(), currentProject, GlobalSearchScope.allScope(currentProject)))
@@ -41,7 +41,6 @@ val AnActionEvent.parentClassElement: PsiClass? get() {
     }
     return null
 }
-
 
 fun PsiFile.isKotlin(): Boolean {
     return this is KtFile

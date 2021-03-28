@@ -17,6 +17,8 @@ class GenerateMockkBoilerplateAction : AnAction() {
     }
 
     override fun actionPerformed(event: AnActionEvent) {
+        val testClass = event.parentClassElement!!
+        val testedClass = testedClassResolver.resolveTestedClassFromTestClass(testClass, event.currentProject)
         println("aaaa")
         // getGenerator(event.file)?.generateFixture(
         //     context = FixtureGenerationContext(

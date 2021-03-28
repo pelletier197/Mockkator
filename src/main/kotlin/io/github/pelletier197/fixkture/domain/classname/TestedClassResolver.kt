@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTypesUtil
 class TestedClassResolver {
     private val testClassSuffixes = listOf("Test", "IT")
 
-    fun isTestClass(testClass: PsiClass) : Boolean {
+    fun isTestClass(testClass: PsiClass): Boolean {
         return resolveTestedClassName(testClass) != null
     }
 

@@ -16,12 +16,12 @@ import org.jetbrains.kotlin.psi.KtFile
 
 val AnActionEvent.currentProject: Project get() = currentProjectOrNull() ?: error("project should not be null")
 val AnActionEvent.editor: Editor get() = editorOrNull() ?: error("editor should not be null")
-val AnActionEvent.file: PsiFile get() = fileOrNull() ?: error("file should not be null")
+val AnActionEvent.file: KtFile get() = fileOrNull() ?: error("file should not be null")
 val AnActionEvent.caret: Caret get() = caretOrNull() ?: error("caret should not be null")
 
 fun AnActionEvent.currentProjectOrNull(): Project? = this.getData(CommonDataKeys.PROJECT)
 fun AnActionEvent.editorOrNull(): Editor? = this.getData(CommonDataKeys.EDITOR)
-fun AnActionEvent.fileOrNull(): PsiFile? = this.getData(CommonDataKeys.PSI_FILE)
+fun AnActionEvent.fileOrNull(): KtFile? = this.getData(CommonDataKeys.PSI_FILE) as KtFile?
 fun AnActionEvent.caretOrNull(): Caret? = this.getData(CommonDataKeys.CARET)
 
 val AnActionEvent.currentElement: PsiElement? get() = caretOrNull()?.let { fileOrNull()?.findElementAt(it.caretModel.offset) }

@@ -3,9 +3,12 @@ package io.github.pelletier197.fixkture.api
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import io.github.pelletier197.fixkture.domain.classname.TestedClassResolver
+import io.github.pelletier197.fixkture.domain.mockk.MockkCodeInjector
+import io.github.pelletier197.fixkture.domain.mockk.MockkInjectionContext
 
 class GenerateMockkBoilerplateAction : AnAction() {
     private val testedClassResolver = TestedClassResolver()
+    private val mockkCodeInjector = MockkCodeInjector()
 
     override fun update(event: AnActionEvent) {
         event.presentation.isEnabledAndVisible = event.project != null &&
@@ -19,6 +22,14 @@ class GenerateMockkBoilerplateAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val testClass = event.parentClassElement!!
         val testedClass = testedClassResolver.resolveTestedClassFromTestClass(testClass, event.currentProject)
+        mockkCodeInjector.inject(
+            context = MockkInjectionContext(
+                project = event.currentProject,
+                testClass = testClass,
+                testedClass = testedClass,
+            )
+        )
+
         println("aaaa")
         // getGenerator(event.file)?.generateFixture(
         //     context = FixtureGenerationContext(

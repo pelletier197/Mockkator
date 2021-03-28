@@ -12,6 +12,7 @@ class MockkCodeInjector {
         val targetConstructor = context.testedClass.primaryConstructor ?: throw NoPrimaryConstructorDefinedException()
         val parameters = targetConstructor.parameterList.parameters.toList()
         injectMissingConstructorParameters(context, parameters)
+        injectOrReplaceUnderTest(context)
         println(parameters)
     }
 
@@ -22,10 +23,14 @@ class MockkCodeInjector {
     }
 
     private fun insertConstructorParameter(context: MockkInjectionContext, parameter: PsiParameter) {
-        context.addImport("io.mockk.mockk")
-        context.addImport(parameter.type.canonicalText)
-        context.insertStatement(
-            text = "val ${context.suggestVariableName(parameter.type)} = mockk<${PsiTypesUtil.getPsiClass(parameter.type)!!.name}>()"
+        context.addImportIfNotExist("io.mockk.mockk")
+        context.addImportIfNotExist(parameter.type.canonicalText)
+        context.insertUnderTestParameter(
+            text = "val ${parameter.name} = mockk<${PsiTypesUtil.getPsiClass(parameter.type)!!.name}>()"
         )
+    }
+
+    private fun injectOrReplaceUnderTest(context: MockkInjectionContext) {
+        TODO("Not yet implemented")
     }
 }

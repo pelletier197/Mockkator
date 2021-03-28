@@ -2,36 +2,41 @@
 [![JetBrains IntelliJ Plugins](https://img.shields.io/jetbrains/plugin/v/15520?label=PLUGIN&logo=IntelliJ%20IDEA&style=for-the-badge)](https://plugins.jetbrains.com/plugin/15520-fixkture)
 [![CircleCI](https://img.shields.io/circleci/build/github/pelletier197/Mockkator?label=Circle%20CI&logo=circleci&style=for-the-badge)](https://app.circleci.com/pipelines/github/pelletier197/Fixkture)
 
-<p align="center">
-  <img src="./logo/logo.png">
-</p>
+[comment]: <> (<p align="center">)
 
-# Fixkture
-Fixkture is an Intellij Plugin to generate test fixtures that supports both Java and Kotlin. It helps generating complex objects from a target class, which may be long and exhausting to do manually, especially for big objects. It does so by providing arbitrary parameters in the object's constructor.
+[comment]: <> (  <img src="./logo/logo.png">)
+
+[comment]: <> (</p>)
+
+# Mockkator
+Mockkator is an Intellij plugin you can use to generate [Mockk](https://github.com/mockk/mockk) boilerplate code in your unit tests.
 
 ## Example
-Given the sample data class
+Given a sample class 
 ```kotlin
-data class Example(
-    val first: String,
-    val second: List<String>
-)
+class ComplexService(
+    val input: String,
+    val otherObject: TestObject
+) {
+    // Your logic
+}
 ```
-> This is a really simple class, but the plugin will easily support generating an extremely complex object with nested objects in it.
 
-### Kotlin
-The generated fixture will look like this
+The generated test code will look like this:
 ```kotlin
-val example: Example = Example(first = "first", second = listOf("second"))
+class ComplexServiceTest : ShouldSpec ({
+    // Generated code begins here
+    val input = "input"
+    val otherObject = mockk<TestObject>()
+    
+    val underTest = ComplexService(
+        input = input,
+        otherObject = otherObject,
+    )
+})
 ```
-The library will use standard library functions to achieve fixture generation in as less code as possible, white keeping the fixture extremely readable.
+> This example uses [Kotest](https://github.com/kotest/kotest) as the testing framework, but this plugin is agnostic of what test framework you use
 
-### Java
-Here is be the output code for the exact same class in Java
-```java
-public static final Example example = new Example("first", List.of("second"));
-```
-Again, standard functions of Java 11 are used to generate the fixture elements.
 
 ## Usage
 You can download the plugin from the [Plugin Marketplace](https://plugins.jetbrains.com/plugin/15520-fixkture) and follow the instructions detailed in the documentation of the plugin.

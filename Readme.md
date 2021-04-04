@@ -2,11 +2,9 @@
 [![JetBrains IntelliJ Plugins](https://img.shields.io/jetbrains/plugin/v/15520?label=PLUGIN&logo=IntelliJ%20IDEA&style=for-the-badge)](https://plugins.jetbrains.com/plugin/15520-fixkture)
 [![CircleCI](https://img.shields.io/circleci/build/github/pelletier197/Mockkator?label=Circle%20CI&logo=circleci&style=for-the-badge)](https://app.circleci.com/pipelines/github/pelletier197/Fixkture)
 
-[comment]: <> (<p align="center">)
-
-[comment]: <> (  <img src="./logo/logo.png">)
-
-[comment]: <> (</p>)
+<p align="center">
+  <img src="./logo/logo.png">
+</p>
 
 # Mockkator
 Mockkator is an Intellij plugin you can use to generate [Mockk](https://github.com/mockk/mockk) boilerplate code in your unit tests.

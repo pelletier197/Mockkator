@@ -9,18 +9,18 @@ class NoPrimaryConstructorDefinedException :
     MockkCodeInjectionException("No primary constructor was found for your class")
 
 class MockkCodeInjector {
-    val underTestVariableName = "underTest"
+    private val underTestVariableName = "underTest"
 
     fun inject(context: MockkInjectionContext) {
         val targetConstructor = context.testedClass.primaryConstructor ?: throw NoPrimaryConstructorDefinedException()
         val parameters = targetConstructor.parameterList.parameters.toList()
-        injectMissingConstructorParameters(context, parameters)
         injectOrReplaceUnderTest(context, parameters)
+        injectMissingConstructorParameters(context, parameters)
         println(parameters)
     }
 
     private fun injectMissingConstructorParameters(context: MockkInjectionContext, parameters: List<PsiParameter>) {
-        parameters.forEach {
+        parameters.reversed().forEach {
             insertConstructorParameter(context = context, parameter = it)
         }
     }
@@ -40,7 +40,7 @@ class MockkCodeInjector {
             .firstOrNull { it.name == underTestVariableName }
         context.replaceElementWithStatement(
             elementToReplace = existingUnderTest,
-            text = """val $underTestVariableName = ${context.testedClass.qualifiedName}(
+            text = """val $underTestVariableName = ${context.testedClass.name}(
                     ${parameters.joinToString(separator = "\n") { "${it.name} = ${it.name}," }}
                 )
                 """

@@ -6,6 +6,7 @@ import com.intellij.openapi.command.WriteCommandAction
 import io.github.pelletier197.fixkture.domain.classname.TestedClassResolver
 import io.github.pelletier197.fixkture.domain.mockk.MockkCodeInjector
 import io.github.pelletier197.fixkture.domain.mockk.MockkInjectionContext
+import org.jetbrains.kotlin.idea.core.ShortenReferences
 
 class GenerateMockkBoilerplateAction : AnAction() {
     private val testedClassResolver = TestedClassResolver()
@@ -34,21 +35,8 @@ class GenerateMockkBoilerplateAction : AnAction() {
                     element = event.currentElement,
                 )
             )
+
+            ShortenReferences.DEFAULT.process(event.file)
         }
-
-        println("aaaa")
-        // getGenerator(event.file)?.generateFixture(
-        //     context = FixtureGenerationContext(
-        //         project = event.currentProject,
-        //         caret = event.caret,
-        //         file = event.file
-        //     )
-        // )
     }
-
-    // private fun getGenerator(file: PsiFile): FixtureGenerator? {
-    //     if (file.isJava()) return JavaIntellijFixtureGenerator()
-    //     if (file.isKotlin()) return KotlinIntellijFixtureGenerator()
-    //     return null
-    // }
 }

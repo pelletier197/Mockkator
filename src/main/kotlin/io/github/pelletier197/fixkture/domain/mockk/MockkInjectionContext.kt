@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.ImportPath
@@ -18,6 +19,7 @@ data class MockkInjectionContext(
     val testedClass: PsiClass,
 ) {
     private val ktFactory = KtPsiFactory(project)
+    private var lastVariablePosition: KtElement? = element?.parent?.children.orEmpty().lastOrNull { }
 
     fun addImportIfNotExist(import: String) {
         val importToAdd = ktFactory.createImportDirective(ImportPath.fromString(import))
@@ -33,8 +35,8 @@ data class MockkInjectionContext(
         element?.parent?.addBefore(statement, element) ?: file.add(statement)
     }
 
-    fun replaceElementWithStatement(element: PsiElement?, text: String) {
+    fun replaceElementWithStatement(elementToReplace: PsiElement?, text: String) {
         val statement = ktFactory.createDeclaration<KtDeclaration>(text)
-        element?.replace(statement) ?: element?.parent?.addBefore(statement, element) ?: file.add(statement)
+        elementToReplace?.replace(statement) ?: element?.parent?.addBefore(statement, element) ?: file.add(statement)
     }
 }

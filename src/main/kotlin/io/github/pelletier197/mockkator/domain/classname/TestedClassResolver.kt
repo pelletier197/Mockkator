@@ -1,11 +1,11 @@
-package io.github.pelletier197.fixkture.domain.classname
+package io.github.pelletier197.mockkator.domain.classname
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiType
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTypesUtil
-import io.github.pelletier197.fixkture.domain.mockk.exception.MockkCodeInjectionException
+import io.github.pelletier197.mockkator.domain.mockk.exception.MockkCodeInjectionException
 import java.lang.IllegalArgumentException
 
 class TestedClassNotFound : MockkCodeInjectionException("could not resolve tested class from test class name")

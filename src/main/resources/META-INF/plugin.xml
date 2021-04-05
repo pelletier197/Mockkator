@@ -6,16 +6,13 @@
     <idea-version since-build="202" />
 
     <description><![CDATA[
-    This is a simple plugin that takes care of generating Mockk's boilerplate code for you. It searches for the tested class automatically based on the name of your test, and instantiate it with all its fields mockked.
+    This is a simple plugin that takes care of generating Mockk's boilerplate code for you. It searches for the tested class automatically based on the name of your test, and instantiate it with all its fields mocked.
 
-    Do you write tests (I sincerely hope you do)? Are you tired of writing test fixtures for your 30 fields DTO? Here's the solution!
+    If you update your tested class, you can run the plugin again and it will add what is missing automatically.
     <br>
     <b>Usage</b>
     <br>
     At the top of your tested class, hit <b>alt+insert</b> and select <b>Mockk Code</b>.
-    <br>
-    <b>Generated code</b>
-    <br>
     <br>
     <b>Contribute</b>
     <br>
@@ -36,8 +33,8 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <actions>
-        <action id="io.github.pelletier197.fixkture.api.GenerateMockkBoilerplateAction"
-                class="io.github.pelletier197.fixkture.api.GenerateMockkBoilerplateAction" text="Mockk Code"
+        <action id="io.github.pelletier197.mockkator.api.GenerateMockkBoilerplateAction"
+                class="io.github.pelletier197.mockkator.api.GenerateMockkBoilerplateAction" text="Mockk Code"
                 description="Generates Mockk boilerplate code for the tested class">
             <add-to-group group-id="GenerateGroup" anchor="first"/>
         </action>

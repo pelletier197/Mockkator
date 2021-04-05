@@ -1,8 +1,8 @@
-package io.github.pelletier197.fixkture.domain.mockk
+package io.github.pelletier197.mockkator.domain.mockk
 
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.PsiTypesUtil
-import io.github.pelletier197.fixkture.domain.mockk.exception.MockkCodeInjectionException
+import io.github.pelletier197.mockkator.domain.mockk.exception.MockkCodeInjectionException
 import org.jetbrains.kotlin.psi.KtProperty
 
 class NoPrimaryConstructorDefinedException :

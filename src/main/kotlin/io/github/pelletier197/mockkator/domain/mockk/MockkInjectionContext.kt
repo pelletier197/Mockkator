@@ -1,4 +1,4 @@
-package io.github.pelletier197.fixkture.domain.mockk
+package io.github.pelletier197.mockkator.domain.mockk
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass

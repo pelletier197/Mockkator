@@ -1,11 +1,11 @@
-package io.github.pelletier197.fixkture.api
+package io.github.pelletier197.mockkator.api
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.command.WriteCommandAction
-import io.github.pelletier197.fixkture.domain.classname.TestedClassResolver
-import io.github.pelletier197.fixkture.domain.mockk.MockkCodeInjector
-import io.github.pelletier197.fixkture.domain.mockk.MockkInjectionContext
+import io.github.pelletier197.mockkator.domain.classname.TestedClassResolver
+import io.github.pelletier197.mockkator.domain.mockk.MockkCodeInjector
+import io.github.pelletier197.mockkator.domain.mockk.MockkInjectionContext
 import org.jetbrains.kotlin.idea.core.ShortenReferences
 
 class GenerateMockkBoilerplateAction : AnAction() {

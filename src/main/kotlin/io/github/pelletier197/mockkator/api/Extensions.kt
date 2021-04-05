@@ -1,4 +1,4 @@
-package io.github.pelletier197.fixkture.api
+package io.github.pelletier197.mockkator.api
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys

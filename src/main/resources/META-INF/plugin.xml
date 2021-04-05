@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>io.github.pelletier197.fixkture</id>
+    <id>io.github.pelletier197.mockkator</id>
     <name>Mockkator</name>
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
 

@@ -4,124 +4,110 @@ import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
 import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
-import io.github.pelletier197.fixkture.domain.FieldConstructionContext
-import io.github.pelletier197.fixkture.domain.InstantiationFieldBuilder
-import io.github.pelletier197.fixkture.domain.NullInstantiationField
-import io.github.pelletier197.fixkture.domain.TargetElement
-import io.github.pelletier197.fixkture.domain.createInstantiationField
-import io.github.pelletier197.fixkture.domain.generator.LanguageCallbackInstantiationFieldBuilder
-import io.github.pelletier197.fixkture.domain.generator.NestedElementInstantiationFieldBuilder
-import io.github.pelletier197.fixkture.domain.generator.java.Utils.extractType
+import io.github.pelletier197.mockkator.domain.mockk.UnderTestParameterInjector.createInstantiationFieldIfPossible
+import io.github.pelletier197.mockkator.domain.mockk.generator.Utils.extractType
 
 object CollectionGenerator {
-    fun generateList(): InstantiationFieldBuilder {
+    private val collectionEndingThatCanBeStripped = listOf("Set", "List", "s")
+
+    fun generateList(context: UnderTestParameterInstantiationContext) {
+        return createCollection("listOf(", context, ")")
+    }
+
+    fun generateArrayList(context: UnderTestParameterInstantiationContext) {
+        return createCollection("ArrayList(listOf(", context, "))")
+    }
+
+    fun generateLinkedList(context: UnderTestParameterInstantiationContext) {
+        return createCollection("LinkedList(listOf(", context, "))")
+    }
+
+    fun generateSet(context: UnderTestParameterInstantiationContext) {
+        return createCollection("setOf(", context, ")")
+    }
+
+    fun generateHashset(context: UnderTestParameterInstantiationContext) {
+        return createCollection("HashSet(setOf(", context, "))")
+    }
+
+    fun generateTreeSet(context: UnderTestParameterInstantiationContext) {
+        return createCollection("TreeSet(setOf(", context, "))")
+    }
+
+    fun generateIterable(context: UnderTestParameterInstantiationContext) {
+        return generateList(context)
+    }
+
+    fun generateMap(context: UnderTestParameterInstantiationContext) {
         return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "java.util.List.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
-            kotlin = { context -> "listOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
+            kotlin = { context ->
+                "mapOf(${createMapKeyBuilder(context).asKotlinFlatValue(context)} to ${
+                createMapValueBuilder(
+                    context
+                ).asKotlinFlatValue(context)
+                })"
+            }
         )
     }
 
-    fun generateSet(): InstantiationFieldBuilder {
-        return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "java.util.Set.of(${createCollectionArgument(context = context).asJavaFlatValue(context)})" },
-            kotlin = { context -> "setOf(${createCollectionArgument(context = context).asKotlinFlatValue(context)})" }
-        )
-    }
-
-    fun generateHashset(): InstantiationFieldBuilder {
-        val setBuilder = generateSet()
-        return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "new java.util.HashSet<>(${setBuilder.asJavaFlatValue(context)})" },
-            kotlin = { context -> "HashSet(${setBuilder.asKotlinFlatValue(context)})" }
-        )
-    }
-
-    fun generateTreeSet(): InstantiationFieldBuilder {
-        val setBuilder = generateSet()
-        return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "new java.util.TreeSet<>(${setBuilder.asJavaFlatValue(context)})" },
-            kotlin = { context -> "TreeSet(${setBuilder.asKotlinFlatValue(context)})" }
-        )
-    }
-
-    fun generateArrayList(): InstantiationFieldBuilder {
-        val listBuilder = generateList()
-        return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "new java.util.ArrayList<>(${listBuilder.asJavaFlatValue(context)})" },
-            kotlin = { context -> "ArrayList(${listBuilder.asKotlinFlatValue(context)})" }
-        )
-    }
-
-    fun generateLinkedList(): InstantiationFieldBuilder {
-        val listBuilder = generateList()
-        return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "new java.util.LinkedList<>(${listBuilder.asJavaFlatValue(context)})" },
-            kotlin = { context -> "LinkedList(${listBuilder.asKotlinFlatValue(context)})" }
-        )
-    }
-
-    fun generateIterable(): InstantiationFieldBuilder {
-        return generateList()
-    }
-
-    fun generateMap(): InstantiationFieldBuilder {
-        return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "java.util.Map.of(${createMapKeyBuilder(context).asJavaFlatValue(context)}, ${createMapValueBuilder(context).asJavaFlatValue(context)})" },
-            kotlin = { context -> "mapOf(${createMapKeyBuilder(context).asKotlinFlatValue(context)} to ${createMapValueBuilder(context).asKotlinFlatValue(context)})" }
-        )
-    }
-
-    fun generateHashMap(): InstantiationFieldBuilder {
+    fun generateHashMap(context: UnderTestParameterInstantiationContext) {
         val mapBuilder = generateMap()
         return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "java.util.HashMap<>(${mapBuilder.asJavaFlatValue(context)})" },
             kotlin = { context -> "HashMap(${mapBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
-    fun generateTreeMap(): InstantiationFieldBuilder {
+    fun generateTreeMap(context: UnderTestParameterInstantiationContext) {
         val mapBuilder = generateMap()
         return LanguageCallbackInstantiationFieldBuilder(
-            java = { context -> "java.util.TreeMap<>(${mapBuilder.asJavaFlatValue(context)})" },
             kotlin = { context -> "TreeMap(${mapBuilder.asKotlinFlatValue(context)})" }
         )
     }
 
-    private fun createMapKeyBuilder(context: FieldConstructionContext): InstantiationFieldBuilder {
+    private fun createCollection(
+        beforeText: String,
+        context: UnderTestParameterInstantiationContext,
+        afterText: String
+    ) {
+        val targetType = getIterableElementType(context)!!
+        val collectionElementName = generateCollectionElementName(context.parameterName)
+        context.createParameterWithInstantiationDeclaration("$beforeText$collectionElementName$afterText")
+        createInstantiationFieldIfPossible(
+            context = context.createForSubVariable(
+                parameterName = collectionElementName,
+                element = targetType,
+            )
+        )
+    }
+
+    private fun createMapKeyBuilder(context: UnderTestParameterInstantiationContext) {
         return createMapArgument(context, 0)
     }
 
-    private fun createMapValueBuilder(context: FieldConstructionContext): InstantiationFieldBuilder {
+    private fun createMapValueBuilder(context: UnderTestParameterInstantiationContext) {
         return createMapArgument(context, 1)
     }
 
-    private fun createMapArgument(context: FieldConstructionContext, parameterIndex: Int): InstantiationFieldBuilder {
-        val type = extractType(context) ?: return NullInstantiationField()
+    private fun createMapArgument(context: UnderTestParameterInstantiationContext, parameterIndex: Int) {
+        val type = extractType(context.currentElement)!!
 
         if (type is PsiClassReferenceType) {
             val parameterTypes = type.reference.typeParameters
             return createArgument(context, parameterTypes[parameterIndex])
         }
-
-        return NullInstantiationField()
     }
 
-    private fun createCollectionArgument(context: FieldConstructionContext): InstantiationFieldBuilder {
-        val targetType = getIterableElementType(context) ?: return NullInstantiationField()
+    private fun createCollectionArgument(context: UnderTestParameterInstantiationContext) {
+        val targetType = getIterableElementType(context)!!
         return createArgument(context, targetType)
     }
 
-    private fun createArgument(context: FieldConstructionContext, targetType: PsiType): InstantiationFieldBuilder {
-        return NestedElementInstantiationFieldBuilder(
-            elementBuilder = createInstantiationField(
-                context = context.asClassInstantiationStatementBuilderContext(TargetElement.of(targetType))
-            ),
-            targetElement = TargetElement.of(targetType)
-        )
+    private fun createArgument(context: UnderTestParameterInstantiationContext, targetType: PsiType) {
+        return
     }
 
-    private fun getIterableElementType(context: FieldConstructionContext): PsiType? {
-        return extractType(context)?.let { extractListElementTypeFromType(it) }
+    private fun getIterableElementType(context: UnderTestParameterInstantiationContext): PsiType? {
+        return extractType(context.currentElement)?.let { extractListElementTypeFromType(it) }
     }
 
     private fun extractListElementTypeFromType(element: PsiType): PsiType? {
@@ -132,5 +118,16 @@ object CollectionGenerator {
         }
 
         return parameterType
+    }
+
+    private fun generateCollectionElementName(collectionName: String): String {
+        // Plural list name. Just remove the trailing `s` and return the element name
+        collectionEndingThatCanBeStripped.forEach {
+            if (collectionName.endsWith(it) && collectionName.length > it.length) {
+                return collectionName.dropLast(it.length)
+            }
+        }
+
+        return collectionName + "Element"
     }
 }

@@ -1,17 +1,17 @@
 package io.github.pelletier197.mockkator.domain.mockk.generator
 
-import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiType
 import io.github.pelletier197.mockkator.domain.mockk.MockkInjectionContext
 import org.jetbrains.kotlin.psi.KtParameter
 
 data class UnderTestParameterInstantiationContext(
     val mockkContext: MockkInjectionContext,
     val originalParameter: KtParameter,
-    val currentElement: PsiElement,
+    val currentElement: Any,
     val parameterName: String = originalParameter.name ?: "parameter",
 ) {
-    fun createForSubVariable(parameterName: String): UnderTestParameterInstantiationContext {
-        return this.copy(parameterName = parameterName)
+    fun createForSubVariable(parameterName: String, element: PsiType): UnderTestParameterInstantiationContext {
+        return this.copy(parameterName = parameterName, currentElement = element)
     }
 
     fun addImportIfNotExist(import: String) {

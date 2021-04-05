@@ -40,4 +40,4 @@ class ComplexServiceTest : ShouldSpec ({
 You can download the plugin from the [Plugin Marketplace](https://plugins.jetbrains.com/plugin/15520-fixkture) and follow the instructions detailed in the documentation of the plugin.
 
 ## Contribute
-You can contribute to this project by opening your own PR or by creating issues to propose improvement ideas. 
+You can contribute to this project by forking it and opening your own PR or by creating issues to propose improvements or report bugs.

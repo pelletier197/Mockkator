@@ -14,7 +14,7 @@ object ArrayGenerator {
         UnderTestParameterInjector.createUnderTestParameter(
             context = context.createForSubVariable(
                 parameterName = arrayElementName,
-                element = type,
+                element = (type as PsiArrayType).componentType,
             )
         )
     }

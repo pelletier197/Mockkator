@@ -5,6 +5,7 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.ImportPath
 
@@ -27,14 +28,27 @@ data class MockkInjectionContext(
     }
 
     fun insertUnderTestParameter(text: String) {
-        val existingStatements = element?.parent?.children.orEmpty().map { it.text }
-        if (existingStatements.contains(text)) return
+        val assignation = text.split("=").firstOrNull()?.trim()
+        val existingStatements = listCloseChildren().map { it.text }
+        if (assignation != null && existingStatements.any { it.startsWith("$assignation =") }) return
         val statement = ktFactory.createDeclaration<KtDeclaration>(text)
         element = element?.parent?.addBefore(statement, element) ?: file.add(statement)
     }
 
     fun replaceElementWithStatement(elementToReplace: PsiElement?, text: String) {
         val statement = ktFactory.createDeclaration<KtDeclaration>(text)
-        element = elementToReplace?.replace(statement) ?: element?.parent?.addBefore(statement, element) ?: file.add(statement)
+        element = elementToReplace?.replace(statement) ?: element?.parent?.addBefore(statement, element) ?: file.add(
+            statement
+        )
+    }
+
+    fun listCloseChildren(): List<PsiElement> {
+        return listChildElements(element?.parent)
+    }
+
+    private fun listChildElements(element: PsiElement?): List<PsiElement> {
+        if (element == null) return emptyList()
+        if (element is KtProperty) return listOf(element)
+        return element.children.flatMap { listChildElements(it) }
     }
 }

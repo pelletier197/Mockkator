@@ -37,8 +37,7 @@ class MockkCodeInjector {
     }
 
     private fun injectOrReplaceUnderTest(context: MockkInjectionContext, parameters: List<PsiParameter>) {
-        val existingUnderTest = context.element?.parent?.children
-            .orEmpty()
+        val existingUnderTest = context.listCloseChildren()
             .filterIsInstance<KtProperty>()
             .firstOrNull { it.name == underTestVariableName }
         context.replaceElementWithStatement(

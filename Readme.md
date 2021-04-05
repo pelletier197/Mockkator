@@ -1,5 +1,5 @@
-[![JetBrains IntelliJ plugins](https://img.shields.io/jetbrains/plugin/d/15520?logo=Intellij%20IDEA&style=for-the-badge)](https://plugins.jetbrains.com/plugin/15520-fixkture)
-[![JetBrains IntelliJ Plugins](https://img.shields.io/jetbrains/plugin/v/15520?label=PLUGIN&logo=IntelliJ%20IDEA&style=for-the-badge)](https://plugins.jetbrains.com/plugin/15520-fixkture)
+[![JetBrains IntelliJ plugins](https://img.shields.io/jetbrains/plugin/d/16471?logo=Intellij%20IDEA&style=for-the-badge)](https://plugins.jetbrains.com/plugin/16471-mockkator)
+[![JetBrains IntelliJ Plugins](https://img.shields.io/jetbrains/plugin/v/16471?label=PLUGIN&logo=IntelliJ%20IDEA&style=for-the-badge)](https://plugins.jetbrains.com/plugin/16471-mockkator)
 [![CircleCI](https://img.shields.io/circleci/build/github/pelletier197/Mockkator?label=Circle%20CI&logo=circleci&style=for-the-badge)](https://app.circleci.com/pipelines/github/pelletier197/Mockkator)
 
 <p align="center">
@@ -37,7 +37,7 @@ class ComplexServiceTest : ShouldSpec ({
 
 
 ## Usage
-You can download the plugin from the [Plugin Marketplace](https://plugins.jetbrains.com/plugin/15520-fixkture) and follow the instructions detailed in the documentation of the plugin.
+You can download the plugin from the [Plugin Marketplace](https://plugins.jetbrains.com/plugin/16471-mockkator) and follow the instructions detailed in the documentation of the plugin.
 
 ## Contribute
 You can contribute to this project by forking it and opening your own PR or by creating issues to propose improvements or report bugs.

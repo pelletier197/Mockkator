@@ -4,7 +4,7 @@
     <vendor url="https://github.com/pelletier197">pelletier197</vendor>
 
     <idea-version since-build="202" />
-
+    <version>1.0.0</version>
     <description><![CDATA[
     This is a simple plugin that takes care of generating Mockk's boilerplate code for you. It searches for the tested class automatically based on the name of your test, and instantiate it with all its fields mocked.
 

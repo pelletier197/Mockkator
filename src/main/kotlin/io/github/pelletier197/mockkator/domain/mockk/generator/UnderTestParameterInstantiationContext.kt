@@ -1,12 +1,12 @@
 package io.github.pelletier197.mockkator.domain.mockk.generator
 
+import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiType
 import io.github.pelletier197.mockkator.domain.mockk.MockkInjectionContext
-import org.jetbrains.kotlin.psi.KtParameter
 
 data class UnderTestParameterInstantiationContext(
     val mockkContext: MockkInjectionContext,
-    val originalParameter: KtParameter,
+    val originalParameter: PsiParameter,
     val currentElement: Any,
     val parameterName: String = originalParameter.name ?: "parameter",
 ) {

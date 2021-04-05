@@ -1,8 +1,8 @@
 package io.github.pelletier197.mockkator.domain.mockk
 
 import com.intellij.psi.PsiParameter
-import com.intellij.psi.util.PsiTypesUtil
 import io.github.pelletier197.mockkator.domain.mockk.exception.MockkCodeInjectionException
+import io.github.pelletier197.mockkator.domain.mockk.generator.UnderTestParameterInstantiationContext
 import org.jetbrains.kotlin.psi.KtProperty
 
 class NoPrimaryConstructorDefinedException :
@@ -26,10 +26,13 @@ class MockkCodeInjector {
     }
 
     private fun insertConstructorParameter(context: MockkInjectionContext, parameter: PsiParameter) {
-        context.addImportIfNotExist("io.mockk.mockk")
-        context.addImportIfNotExist(parameter.type.canonicalText)
-        context.insertUnderTestParameter(
-            text = "val ${parameter.name} = mockk<${PsiTypesUtil.getPsiClass(parameter.type)!!.name}>()"
+        UnderTestParameterInjector.createUnderTestParameter(
+            context = UnderTestParameterInstantiationContext(
+                mockkContext = context,
+                originalParameter = parameter,
+                currentElement = parameter,
+                parameterName = parameter.name,
+            )
         )
     }
 

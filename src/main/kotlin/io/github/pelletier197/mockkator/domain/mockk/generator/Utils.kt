@@ -8,6 +8,7 @@ object Utils {
         return when (element) {
             is PsiParameter -> element.type
             is PsiType -> element
+            is UnderTestParameterInstantiationContext -> extractType(element.currentElement)
             else -> null
         }
     }

@@ -6,6 +6,8 @@ import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiUtil
+import io.github.pelletier197.mockkator.domain.mockk.generator.ArrayGenerator
+import io.github.pelletier197.mockkator.domain.mockk.generator.CollectionGenerator
 import io.github.pelletier197.mockkator.domain.mockk.generator.EnumGenerator
 import io.github.pelletier197.mockkator.domain.mockk.generator.LibraryGenerator
 import io.github.pelletier197.mockkator.domain.mockk.generator.MockkClassGenerator
@@ -14,7 +16,7 @@ import io.github.pelletier197.mockkator.domain.mockk.generator.TimeGenerator
 import io.github.pelletier197.mockkator.domain.mockk.generator.UnderTestParameterInstantiationContext
 
 object UnderTestParameterInjector {
-    fun createInstantiationFieldIfPossible(context: UnderTestParameterInstantiationContext) {
+    fun createUnderTestParameter(context: UnderTestParameterInstantiationContext) {
         when (val element = context.currentElement) {
             is PsiClass -> handlePsiClass(element, context)
             is PsiParameter -> handlePsiParameter(element, context)
@@ -49,16 +51,16 @@ object UnderTestParameterInjector {
             "BigDecimal", "java.math.BigDecimal" -> LibraryGenerator.generateBigDecimal(context)
             "BigInteger", "java.math.BigInteger" -> LibraryGenerator.generateBigInteger(context)
             // Collections
-            "List", "java.util.List" -> JavaCollectionGenerator.generateList()
-            "Set", "java.util.Set" -> JavaCollectionGenerator.generateSet()
-            "HashSet", "java.util.HashSet" -> JavaCollectionGenerator.generateHashset()
-            "TreeSet", "java.util.TreeSet" -> JavaCollectionGenerator.generateTreeSet()
-            "ArrayList", "java.util.ArrayList" -> JavaCollectionGenerator.generateArrayList()
-            "LinkedList", "java.util.LinkedList" -> JavaCollectionGenerator.generateLinkedList()
-            "Iterable", "java.lang.Iterable" -> JavaCollectionGenerator.generateIterable()
-            "Map", "java.util.Map" -> JavaCollectionGenerator.generateMap()
-            "HashMap", "java.util.HashMap" -> JavaCollectionGenerator.generateHashMap()
-            "TreeMap", "java.util.TreeMap" -> JavaCollectionGenerator.generateTreeMap()
+            "List", "java.util.List" -> CollectionGenerator.generateList(context)
+            "Set", "java.util.Set" -> CollectionGenerator.generateSet(context)
+            "HashSet", "java.util.HashSet" -> CollectionGenerator.generateHashset(context)
+            "TreeSet", "java.util.TreeSet" -> CollectionGenerator.generateTreeSet(context)
+            "ArrayList", "java.util.ArrayList" -> CollectionGenerator.generateArrayList(context)
+            "LinkedList", "java.util.LinkedList" -> CollectionGenerator.generateLinkedList(context)
+            "Iterable", "java.lang.Iterable" -> CollectionGenerator.generateIterable(context)
+            "Map", "java.util.Map" -> CollectionGenerator.generateMap(context)
+            "HashMap", "java.util.HashMap" -> CollectionGenerator.generateHashMap(context)
+            "TreeMap", "java.util.TreeMap" -> CollectionGenerator.generateTreeMap(context)
             else -> when (element.isEnum) {
                 true -> EnumGenerator.generateEnum(context)
                 else -> MockkClassGenerator.generateMockk(context)
@@ -66,7 +68,7 @@ object UnderTestParameterInjector {
         }
     }
 
-    fun handlePsiType(
+    private fun handlePsiType(
         type: PsiType,
         context: UnderTestParameterInstantiationContext,
     ) {
@@ -81,7 +83,7 @@ object UnderTestParameterInjector {
                 "boolean" -> PrimitiveGenerator.generateBoolean(context)
                 "byte" -> PrimitiveGenerator.generateByte(context)
             }
-            is PsiArrayType -> JavaArrayGenerator.generateArray()
+            is PsiArrayType -> ArrayGenerator.generateArray(context)
             else -> PsiUtil.resolveClassInType(type)?.let { handlePsiClass(it, context) }
         }
     }

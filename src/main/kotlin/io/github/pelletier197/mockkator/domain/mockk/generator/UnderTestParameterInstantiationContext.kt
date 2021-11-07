@@ -8,7 +8,7 @@ data class UnderTestParameterInstantiationContext(
     val mockkContext: MockkInjectionContext,
     val originalParameter: PsiParameter,
     val currentElement: Any,
-    val parameterName: String = originalParameter.name ?: "parameter",
+    val parameterName: String = originalParameter.name,
 ) {
     fun createForSubVariable(parameterName: String, element: PsiType): UnderTestParameterInstantiationContext {
         return this.copy(parameterName = parameterName, currentElement = element)

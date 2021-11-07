@@ -27,7 +27,7 @@ tasks.withType<KotlinJvmCompile> {
 }
 
 intellij {
-    version.set("2020.2.3")
+    version.set("2021.2.3")
     type.set("IC")
     plugins.set(listOf("java", "Kotlin"))
     updateSinceUntilBuild.set(false)

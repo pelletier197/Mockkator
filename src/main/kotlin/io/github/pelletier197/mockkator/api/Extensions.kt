@@ -24,8 +24,7 @@ fun AnActionEvent.editorOrNull(): Editor? = this.getData(CommonDataKeys.EDITOR)
 fun AnActionEvent.fileOrNull(): KtFile? = this.getData(CommonDataKeys.PSI_FILE) as KtFile?
 fun AnActionEvent.caretOrNull(): Caret? = this.getData(CommonDataKeys.CARET)
 
-val AnActionEvent.currentElement: PsiElement? get() = caretOrNull()?.let { fileOrNull()?.findElementAt(it.caretModel.offset) }
-val AnActionEvent.parentElement: PsiElement? get() = this.currentElement?.parent
+val AnActionEvent.currentElement: PsiElement? get() = this.getData(CommonDataKeys.PSI_ELEMENT)
 val AnActionEvent.parentClassElement: PsiClass? get() {
     var current = currentElement
 
@@ -46,6 +45,6 @@ fun PsiFile.isKotlin(): Boolean {
     return this is KtFile
 }
 
-fun PsiFile.isSupported(): Boolean {
-    return isWritable && (isKotlin())
+fun KtFile.isSupported(): Boolean {
+    return true
 }

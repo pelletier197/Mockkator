@@ -41,6 +41,6 @@ object PrimitiveGenerator {
     private fun toSnakeCase(value: String): String {
         return camelRegex.replace(value) {
             "_${it.value}"
-        }.toLowerCase()
+        }.lowercase()
     }
 }

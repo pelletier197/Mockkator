@@ -14,10 +14,6 @@ data class UnderTestParameterInstantiationContext(
         return this.copy(parameterName = parameterName, currentElement = element)
     }
 
-    fun addImportIfNotExist(import: String) {
-        mockkContext.addImportIfNotExist(import)
-    }
-
     fun createParameterWithInstantiationDeclaration(declarationText: String) {
         mockkContext.insertUnderTestParameter("val $parameterName = $declarationText")
     }

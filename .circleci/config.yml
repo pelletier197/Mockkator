@@ -49,7 +49,7 @@ jobs:
           steps:
             - run: ./gradlew publishPlugin -Pversion=$(echo $CIRCLE_BRANCH | cut -f2 -d-)
 workflows:
-  version: 2.1
+  version: 2
   build-verify-deploy:
     jobs:
       - create-cache

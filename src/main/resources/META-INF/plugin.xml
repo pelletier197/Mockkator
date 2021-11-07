@@ -21,6 +21,11 @@
 
     <change-notes><![CDATA[
     <div>
+        <b>1.2.0</b>
+        <li>Upgrade target Intellij Version</li>
+        <li>Fix invalid imports when the target mock object has type parameters</li>
+    </div>
+    <div>
         <b>1.0.0</b>
         <li>Initial release</li>
     </div>

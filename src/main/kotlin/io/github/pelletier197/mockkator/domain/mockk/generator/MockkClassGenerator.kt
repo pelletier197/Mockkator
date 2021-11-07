@@ -8,7 +8,7 @@ object MockkClassGenerator {
         context.createParameterWithInstantiationDeclaration("io.mockk.mockk<${replaceJavaTypesWithKotlin(type.canonicalText)}>()")
     }
 
-    private fun replaceJavaTypesWithKotlin(input: String) : String {
+    private fun replaceJavaTypesWithKotlin(input: String): String {
         return input
             .replace("java.lang.String", "String")
             .replace("java.lang.Integer", "Int")

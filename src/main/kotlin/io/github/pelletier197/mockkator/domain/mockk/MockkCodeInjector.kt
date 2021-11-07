@@ -16,7 +16,6 @@ class MockkCodeInjector {
         val parameters = targetConstructor.parameterList.parameters.toList()
         injectOrReplaceUnderTest(context, parameters)
         injectMissingConstructorParameters(context, parameters)
-        println(parameters)
     }
 
     private fun injectMissingConstructorParameters(context: MockkInjectionContext, parameters: List<PsiParameter>) {

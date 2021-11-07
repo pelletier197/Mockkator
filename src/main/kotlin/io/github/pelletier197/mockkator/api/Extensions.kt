@@ -24,22 +24,35 @@ fun AnActionEvent.editorOrNull(): Editor? = this.getData(CommonDataKeys.EDITOR)
 fun AnActionEvent.fileOrNull(): KtFile? = this.getData(CommonDataKeys.PSI_FILE) as KtFile?
 fun AnActionEvent.caretOrNull(): Caret? = this.getData(CommonDataKeys.CARET)
 
-val AnActionEvent.currentElement: PsiElement? get() = this.getData(CommonDataKeys.PSI_ELEMENT)
-val AnActionEvent.parentClassElement: PsiClass? get() {
-    var current = currentElement
-
-    while (current != null) {
-        if (current is KtClass) {
-            if (current.fqName == null) {
-                return null
-            }
-            return PsiTypesUtil.getPsiClass(getTypeByName(current.fqName!!.asString(), currentProject, GlobalSearchScope.allScope(currentProject)))
+val AnActionEvent.currentElement: PsiElement?
+    get() = this.fileOrNull()?.let { file ->
+        caretOrNull()?.let {
+            file.findElementAt(it.offset)
         }
-
-        current = current.parent
     }
-    return null
-}
+
+val AnActionEvent.parentClassElement: PsiClass?
+    get() {
+        var current = currentElement
+
+        while (current != null) {
+            if (current is KtClass) {
+                if (current.fqName == null) {
+                    return null
+                }
+                return PsiTypesUtil.getPsiClass(
+                    getTypeByName(
+                        current.fqName!!.asString(),
+                        currentProject,
+                        GlobalSearchScope.allScope(currentProject)
+                    )
+                )
+            }
+
+            current = current.parent
+        }
+        return null
+    }
 
 fun PsiFile.isKotlin(): Boolean {
     return this is KtFile

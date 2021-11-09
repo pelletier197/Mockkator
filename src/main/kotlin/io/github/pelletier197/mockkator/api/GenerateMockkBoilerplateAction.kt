@@ -1,12 +1,16 @@
 package io.github.pelletier197.mockkator.api
 
+import com.intellij.lang.LanguageImportStatements
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.psi.codeStyle.JavaCodeStyleManager
 import io.github.pelletier197.mockkator.domain.classname.TestedClassResolver
 import io.github.pelletier197.mockkator.domain.mockk.MockkCodeInjector
 import io.github.pelletier197.mockkator.domain.mockk.MockkInjectionContext
 import org.jetbrains.kotlin.idea.core.ShortenReferences
+import org.jetbrains.kotlin.idea.formatter.KotlinFormatterUsageCollector
+import org.jetbrains.kotlin.idea.imports.KotlinImportOptimizer
 
 class GenerateMockkBoilerplateAction : AnAction() {
     private val testedClassResolver = TestedClassResolver()
@@ -35,7 +39,9 @@ class GenerateMockkBoilerplateAction : AnAction() {
                     element = event.currentElement,
                 )
             )
+        }
 
+        WriteCommandAction.runWriteCommandAction(event.currentProject) {
             ShortenReferences.DEFAULT.process(event.file)
         }
     }
